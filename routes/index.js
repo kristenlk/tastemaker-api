@@ -14,7 +14,17 @@ router.get('/', function(req, res, next) {
 
 ////////// AUTH ROUTES //////////
 
-// SIGN UP //
+// LOG IN
+router.route('/login').
+  // get(function(req, res, next) {
+  //   res.sendStatus(405);
+  // })
+  post(passport.authenticate('local', {
+    successRedirect: '/' })
+  )
+
+
+// SIGN UP
 router.route('/signup').
   get(function(req, res, next) {
     res.sendStatus(405);
@@ -39,7 +49,11 @@ router.route('/signup').
         }).then(function(user) {
           cb(null, user);
         }, cb);
-      }
+      } //,
+      // function(user, cb) {
+      //   passport.authenticate('local', {
+      //     successRedirect: '/' })
+      // }
     ], function(err, result) {
       if(err) {
         return next(err);

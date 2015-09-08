@@ -21,11 +21,11 @@ module.exports = function(sequelize, Datatypes){
     password: {
       type: Datatypes.STRING,
       allowNull: false,
-      unique: false,
-      validate: {
-        min: 6,
-        is: /^[a-zA-Z0-9]+$/
-      }
+      unique: false //,
+      // validate: {
+      //   min: 6//,
+      //   // is: /^[a-zA-Z0-9]+$/
+      // }
     }
   }, {
     timestamps: true

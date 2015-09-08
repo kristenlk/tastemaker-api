@@ -10,6 +10,7 @@ var uuid = require('uuid');
 var MongoStore = require('connect-mongo')(session);
 process.env.SESSION_SECRET || require('dotenv').load();
 var passport = require('./lib/passport');
+// var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -31,6 +32,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// flash
+// app.use(flash());
 
 // sessions
 app.use(session({
@@ -41,7 +44,7 @@ app.use(session({
     url : "mongodb://localhost/tastemaker/sessions"
   }),
   cookie : {
-    maxAge : 300000*10 // 50 minutes
+    maxAge : 300000 // 5 minutes
   },
   genid : function(req) {
     return uuid.v4({
@@ -51,10 +54,16 @@ app.use(session({
 }));
 
 
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 // routes
 app.use('/', routes);
 app.use('/users', users);
 // app.use('/favorites', favorites);
+
 
 // error handlers
 
