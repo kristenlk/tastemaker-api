@@ -12,6 +12,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+
 ////////// AUTH ROUTES //////////
 
 // LOG IN
@@ -48,27 +49,33 @@ router.route('/signup').
           password : hash
         }).then(function(user) {
           cb(null, user);
-        }, cb);
-      } //,
-      // function(user, cb) {
-      //   passport.authenticate('local', {
-      //     successRedirect: '/' })
-      // }
+        }, function(err){
+          console.log(err);
+          cb(err);
+        });
+      }
     ], function(err, result) {
       if(err) {
         return next(err);
       }
 
-      res.sendStatus(201);
+      next();
     });
-  });
+  }, passport.authenticate('local', {
+    successRedirect: '/' }));
 
-// DISPLAY USER INFO
-router.route('/userAccount')
-  .get(function(req, res){
-    res.send({user: req.user});
-  });
 
+
+// CHANGE PASSWORD
+
+
+
+// LOG OUT
+router.route('/logout').
+  all(function(req, res, next) {
+    req.logout();
+    res.sendStatus(200);
+  });
 
 
 module.exports = router;

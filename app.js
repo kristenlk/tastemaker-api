@@ -14,6 +14,9 @@ var passport = require('./lib/passport');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var account = require('./routes/account');
+// var favorites = require('./routes/favorites');
+
 
 var app = express();
 
@@ -62,6 +65,7 @@ app.use(passport.session());
 // routes
 app.use('/', routes);
 app.use('/users', users);
+app.use('/account', account);
 // app.use('/favorites', favorites);
 
 

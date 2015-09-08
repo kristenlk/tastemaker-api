@@ -23,8 +23,10 @@ module.exports = function(sequelize, Datatypes){
       allowNull: false,
       unique: false //,
       // validate: {
-      //   min: 6//,
-      //   // is: /^[a-zA-Z0-9]+$/
+      //   len: {
+      //     args: 6
+      //   },
+      //   is: ['^[a-z]+$','i']
       // }
     }
   }, {
