@@ -21,13 +21,7 @@ module.exports = function(sequelize, Datatypes){
     password: {
       type: Datatypes.STRING,
       allowNull: false,
-      unique: false //,
-      // validate: {
-      //   len: {
-      //     args: 6
-      //   },
-      //   is: ['^[a-z]+$','i']
-      // }
+      unique: false
     }
   }, {
     timestamps: true

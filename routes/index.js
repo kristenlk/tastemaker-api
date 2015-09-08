@@ -36,6 +36,11 @@ router.route('/signup').
       return next(err);
     }
 
+    if (req.body.password.length < 6) {
+      var err = new Error("Password must be 6 or more characters.");
+      return next(err);
+    }
+
     async.waterfall([
       function(cb) {
         bcrypt.genSalt(16, cb);
