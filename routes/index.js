@@ -63,4 +63,12 @@ router.route('/signup').
     });
   });
 
+// DISPLAY USER INFO
+router.route('/userAccount')
+  .get(function(req, res){
+    res.send({user: req.user});
+  });
+
+
+
 module.exports = router;
