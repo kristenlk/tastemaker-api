@@ -11,21 +11,21 @@ router.route('/')
     }
     next();
   })
-  .get(function(req, res){
+  .get(function(req, res) {
     res.send({user: req.user});
   });
 
 
 // UPDATE USER INFO
 router.route('/edit')
-  .patch(function(req, res){
+  .patch(function(req, res) {
     console.log(req.body);
     req.user.update({
       email: req.body.email
-    }).then(function(user){
+    }).then(function(user) {
       // console.log(user);
       res.send({user: req.user});
-    }, function(err){
+    }, function(err) {
       res.sendStatus(500);
     });
   });
@@ -33,25 +33,25 @@ router.route('/edit')
 
 // DISPLAY FAVORITES
 router.route('/favorites')
-  .get(function(req, res){
+  .get(function(req, res) {
     models.Favorite.findAll({
       where : {
         UserId : req.user.id
       }
-    }).then(function(favorites){
+    }).then(function(favorites) {
       res.send(favorites);
-    }, function(err){
+    }, function(err) {
       res.sendStatus(500);
     });
   })
 
 
 // ADD A FAVORITE
-  .post(function(req, res){
-    models.Favorite.create({
+  .post(function(req, res) {
+    models.Favorite.create( {
       yelp_id : req.body.yelp_id,
       UserId : req.user.id
-    }).then(function(favorite){
+    }).then(function(favorite) {
       res.send(favorite);
     }, function(err) {
       res.sendStatus(500);
@@ -60,6 +60,15 @@ router.route('/favorites')
 
 
 // DELETE A FAVORITE
-
+router.route('/favorites/:id')
+  .delete(function(req, res) {
+    models.Favorite.findById(req.params.id).then(function(favorite) {
+      favorite.destroy().then(function() {
+        res.send('Your favorite has been deleted.');
+      });
+    }, function(err) {
+      res.sendStatus(500);
+    })
+  })
 
 module.exports = router;
