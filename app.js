@@ -4,6 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cors = require('cors');
+var session = require('express-session');
+var uuid = require('uuid');
+var MongoStore = require('connect-mongo')(session);
+process.env.SESSION_SECRET || require('dotenv').load();
+var passport = require('./lib/passport');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -14,6 +20,9 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+// CORS policy
+app.use(cors());
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -22,8 +31,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// sessions
+app.use(session({
+  secret : process.env.SESSION_SECRET,
+  resave : false,
+  saveUninitialized : true,
+  store : new MongoStore({
+    url : "mongodb://localhost/tastemaker/sessions"
+  }),
+  cookie : {
+    maxAge : 300000*10 // 50 minutes
+  },
+  genid : function(req) {
+    return uuid.v4({
+      rng : uuid.nodeRNG
+    });
+  }
+}));
+
+
+// routes
 app.use('/', routes);
 app.use('/users', users);
+// app.use('/favorites', favorites);
+
+// error handlers
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -31,8 +64,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-
-// error handlers
 
 // development error handler
 // will print stacktrace
