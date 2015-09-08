@@ -10,11 +10,13 @@ var uuid = require('uuid');
 var MongoStore = require('connect-mongo')(session);
 process.env.SESSION_SECRET || require('dotenv').load();
 var passport = require('./lib/passport');
+var url = require('url');
 // var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var account = require('./routes/account');
+var restaurant = require('./routes/restaurant');
 // var favorites = require('./routes/favorites');
 
 
@@ -32,6 +34,10 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(function(req,res,next){
+  res.locals.query = url.parse(req.url, true).query;
+  next();
+});
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -66,6 +72,7 @@ app.use(passport.session());
 app.use('/', routes);
 app.use('/users', users);
 app.use('/account', account);
+app.use('/restaurant', restaurant);
 // app.use('/favorites', favorites);
 
 

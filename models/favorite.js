@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(sequelize, Datatypes){
 
   var Favorite = sequelize.define('Favorite', {
