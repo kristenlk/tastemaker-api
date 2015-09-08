@@ -22,8 +22,10 @@ module.exports = function(sequelize, Datatypes){
       type: Datatypes.STRING,
       allowNull: false,
       unique: false,
-      min: 6,
-      is: /^[a-zA-Z0-9]+$/
+      validate: {
+        min: 6,
+        is: /^[a-zA-Z0-9]+$/
+      }
     }
   }, {
     timestamps: true
