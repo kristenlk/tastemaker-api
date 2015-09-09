@@ -60,20 +60,17 @@ router.route('/favorites')
       },
 
       function(favorites, done){
-        var favoriteRestaurants = [];
-        favorites.forEach(function(favorite){
+        // var favoriteRestaurants = [];
+        async.map(favorites, function(favorite, callback){
           favorite.getRestaurant().then(function(restaurant){
-            // Conditional query of Yelp API to be added here (in case it's been a month or more since the last query -  to prevent bad data). if restaurant.createdAt > 1 month ago...
-
-            favoriteRestaurants.push(restaurant);
-            console.log(favoriteRestaurants);
-          }).then(function(favoriteRestaurants){
-            done(null, favoriteRestaurants);
-          }, function(err){
-            done(err);
-          });
-        })
-        return favoriteRestaurants;
+            callback(null, restaurant);
+          }, callback);
+        }, function(err, result){
+          if (err) {
+            return done(err);
+          }
+          done(null, result);
+        });
       }
     ], function(err, result){
       if (err) {
@@ -89,25 +86,33 @@ router.route('/favorites')
   .post(function(req, res) {
     async.waterfall([
       function(done){
-        models.Restaurant.create({ // Create db row for restaurant that's being favorited
-          yelp_id: req.body.yelp_id,
-          rating: req.body.rating,
-          url: req.body.url,
-          display_address: req.body.display_address,
-          display_phone: req.body.display_phone,
-          latitude: req.body.latitude,
-          longitude: req.body.longitude
+        // A restaurant should only be created here if it doesn't already exist in the table
+        models.Restaurant.findOrCreate({ // Create db row for restaurant that's being favorited
+          where: {
+            yelp_id: req.body.yelp_id,
+            rating: req.body.rating,
+            url: req.body.url,
+            display_address: req.body.display_address,
+            display_phone: req.body.display_phone,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude
+          }
         }).then(function(restaurant){
-          done(null, restaurant);
+          console.log(restaurant[0]);
+          // console.log(secondParam);
+          done(null, restaurant[0]);
         }, function(err){
           done(err);
         });
       },
 
       function(restaurant, done){
-        models.Favorite.create({ // Add the restaurant to the user's favorites
-          UserId: req.user.id,
-          RestaurantId: restaurant.id
+        console.log(restaurant.id);
+        models.Favorite.findOrCreate({ // Add the restaurant to the user's favorites
+          where: {
+            UserId: req.user.id,
+            RestaurantId: restaurant.id
+          }
         }).then(function(favorite){
           done(null, favorite);
         }, function(err){

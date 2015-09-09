@@ -13,6 +13,7 @@ var yelp = require('yelp').createClient({
 
 // Get highest-rated restaurant that meets user's criteria
 router.route('/')
+// Not querying restaurants table - that's only so I don't have to query Yelp API every time a user wants to see their favorites
   .get(function(req, res, next) {
     console.log(res.locals.query);
     yelp.search({
