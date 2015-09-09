@@ -9,11 +9,6 @@ module.exports = function(sequelize, Datatypes){
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
-    },
-
-    yelp_id: {
-      type: Datatypes.INTEGER,
-      allowNull: false
     }
 
   }, {

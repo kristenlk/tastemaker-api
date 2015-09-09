@@ -20,8 +20,12 @@ var models = {};
 models.sequelize = sequelize;
 models.User = sequelize.import('./user');
 models.Favorite = sequelize.import('./favorite');
+models.Restaurant = sequelize.import('./restaurant');
 
-models.User.hasMany(models.Favorite, {onDelete: "cascade", hooks: true});
+models.User.hasMany(models.Favorite, {onDelete: 'cascade', hooks: true});
 models.Favorite.belongsTo(models.User);
+
+models.Restaurant.hasMany(models.Favorite, {onDelete: 'cascade', hooks: true});
+models.Favorite.belongsTo(models.Restaurant);
 
 module.exports = models;
