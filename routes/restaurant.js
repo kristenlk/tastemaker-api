@@ -11,7 +11,7 @@ var yelp = require('yelp').createClient({
   token_secret: process.env.TOKEN_SECRET
 });
 
-// GET HIGHEST-RATED RESTAURANT THAT MEETS USER'S CRITERIA
+// Get highest-rated restaurant that meets user's criteria
 router.route('/')
   .get(function(req, res, next) {
     console.log(res.locals.query);
@@ -26,7 +26,8 @@ router.route('/')
       }
       res.json(data);
     });
-  });
+  })
+
 
 // Once I'm returning restaurant price info, I'll need this waterfall
 // async.waterfall([

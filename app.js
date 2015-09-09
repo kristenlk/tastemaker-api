@@ -34,6 +34,8 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// For GET to Yelp API
 app.use(function(req,res,next){
   res.locals.query = url.parse(req.url, true).query;
   next();
