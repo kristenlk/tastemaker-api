@@ -27,7 +27,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // CORS policy
-app.use(cors());
+app.use(cors({
+ credentials: true,
+ origin: 'http://localhost:5000',
+ allowedHeaders: ['Cookie', 'Content-Type']
+}));
+
+// app.use(cors());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -41,7 +47,7 @@ app.use(function(req,res,next){
   next();
 });
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // flash
 // app.use(flash());
@@ -50,11 +56,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret : process.env.SESSION_SECRET,
   resave : false,
-  saveUninitialized : true,
+  saveUninitialized : false,
   store : new MongoStore({
     url : "mongodb://localhost/tastemaker/sessions"
   }),
   cookie : {
+    httpOnly : false,
     maxAge : 300000 // 5 minutes
   },
   genid : function(req) {
