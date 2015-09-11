@@ -3,6 +3,11 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models/index');
+var async = require('async');
+
+// html parsing
+var Parser = require('jq-html-parser');
+var request = require('request');
 
 var yelp = require('yelp').createClient({
   consumer_key: process.env.CONSUMER_KEY,
@@ -15,42 +20,111 @@ var yelp = require('yelp').createClient({
 router.route('/')
 // Not querying restaurants table - that's only so I don't have to query Yelp API every time a user wants to see their favorites
   .get(function(req, res, next) {
-    console.log(res.locals.query);
-    yelp.search({
-      category_filter: res.locals.query.category,
-      sort: 2,
-      ll: res.locals.query.latitude + ',' + res.locals.query.longitude,
-      radius_filter: Number(res.locals.query.distance)
-    }, function(err, data) {
-      if (err) {
-        next(err);
-      }
-      res.json(data);
-    });
-  })
-
-
-// Once I'm returning restaurant price info, I'll need this waterfall
-// async.waterfall([
-//   function(done) {
-    // find all restaurants that meet user's category / are within a certain radius of the user's location
-    // order by highest rated
   //   yelp.search({
   //     category_filter: "italian",
   //     sort: 2,
-  //     ll:'42.3492724,-71.0502206', /*limit: 1, */
+  //     ll:'42.3492724,-71.0502206', // limit: 1,
   //     radius_filter: 1000
-  //   }).then(function(results) {
-  //     done(null, results);
-  //   }, function(err) {
-  //     done(err);
+  //   }, function(err, data) {
+  //     if (err) {
+  //       return next(err);
+  //     }
+  //     res.json(data.businesses);
   //   });
-  // },
-  // function(results, done) {
-  //   // new results array should only be the restaurants that meet the user's price range
-  //   var newResults = [];
-  //   async.map(results)
-  // }
 
+    // change where request is coming from
+    // with the data I get back, go to each business's URL (restaurant.url or whatever)
+    // https://www.npmjs.com/package/jq-html-parser
+  // })
+
+  // .get(function(req, res, next) {
+  //   console.log(res.locals.query);
+  //   yelp.search({
+  //     category_filter: res.locals.query.category_filter,
+  //     sort: 2,
+  //     ll: res.locals.query.ll,
+  //     radius_filter: res.locals.query.radius_filter,
+  //     term: 'food'
+  //   }, function(err, data) {
+  //     console.log(err);
+  //     if (err) {
+  //       return next(err);
+  //     }
+  //     res.json(data);
+  //   });
+  // })
+
+
+async.waterfall([
+  function(done) {
+    // grab all restaurants that meet user's criteria
+    yelp.search({
+      category_filter: res.locals.query.category_filter,
+      sort: 2,
+      ll: res.locals.query.ll,
+      radius_filter: res.locals.query.radius_filter,
+      term: 'food'
+    }, function(err, results) {
+      done(null, results);
+    }, function(err) {
+      done(err);
+    });
+  },
+  function(results, done) {
+    // parse through each restaurant, grab url, go to url and parse html, grab $$$, append it as a new key to each restaurant
+    async.map(results.businesses, function(business, callback){
+
+      var config = {
+        price: {
+          selector: '.price-range'
+        }
+      };
+
+      var url = business.url;
+
+      request.get(url, function(err, res, body){
+        if (err || (res.statusCode != 200)){
+          return console.log('An error occurred while retrieving restaurant information.');
+        }
+
+        var parser = new Parser(config);
+        var result = parser.parse(body);
+        business.price = result.price;
+        callback(null, business)
+      });
+
+    }, function(err, results){
+      // console.log(results);
+      done(null, results);
+    }, done);
+
+
+  },
+  function(results, done){
+    var filteredRestaurants = [];
+
+    var filteredResults = results.filter(function(business){
+      // return business.price === '$$';
+      console.log(res.locals.query);
+      return business.price <= res.locals.query.price;
+    });
+    done(null, filteredResults);
+  }
+
+  ], function(err, results){
+    if (err) {
+      return next(err);
+    }
+    // console.log('hello');
+    res.json(results);
+
+    // go through all restaurants, new array contains only the restaurants that meet the user's price range
+
+
+    // return all restaurants that meet user's price range
+    //
+  });
+
+});
 
 module.exports = router;
