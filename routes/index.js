@@ -22,9 +22,9 @@ router.route('/login').
   // get(function(req, res, next) {
   //   res.sendStatus(405);
   // })
-  post(passport.authenticate('local', {
-    successRedirect: '/' })
-  )
+  post(passport.authenticate('local'), function(req, res){
+    res.sendStatus(201);
+  });
 
 
 // SIGN UP
@@ -68,8 +68,9 @@ router.route('/signup').
 
       next();
     });
-  }, passport.authenticate('local', {
-    successRedirect: '/' }));
+  }, passport.authenticate('local'), function(req, res){
+    res.sendStatus(201);
+  });
 
 
 
@@ -80,8 +81,13 @@ router.route('/signup').
 // LOG OUT
 router.route('/logout').
   all(function(req, res, next) {
-    req.logout();
-    res.sendStatus(200);
+    req.session.destroy(function(err){
+      if (err) {
+        return next(err);
+      }
+      res.clearCookie('connect.sid', { path: '/' });
+      res.sendStatus(200);
+    });
   });
 
 

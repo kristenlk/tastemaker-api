@@ -60,9 +60,10 @@ router.route('/favorites')
       },
 
       function(favorites, done){
-        // var favoriteRestaurants = [];
         async.map(favorites, function(favorite, callback){
           favorite.getRestaurant().then(function(restaurant){
+            // Add conditional query of Yelp API within display favorite / restaurant here. Will do later.
+            // if (restaurant.createdAt)
             callback(null, restaurant);
           }, callback);
         }, function(err, result){
@@ -83,25 +84,29 @@ router.route('/favorites')
 
 
 // ADD A FAVORITE
-  .post(function(req, res) {
+  .post(function(req, res, next) {
     async.waterfall([
       function(done){
         // A restaurant should only be created here if it doesn't already exist in the table
+        console.log(req.body);
         models.Restaurant.findOrCreate({ // Create db row for restaurant that's being favorited
           where: {
             yelp_id: req.body.yelp_id,
+            name: req.body.name,
             rating: req.body.rating,
             url: req.body.url,
-            display_address: req.body.display_address,
+            display_address: JSON.stringify(req.body.display_address),
             display_phone: req.body.display_phone,
-            latitude: req.body.latitude,
-            longitude: req.body.longitude
+            latitude: req.body.latitude.toString(),
+            longitude: req.body.longitude.toString(),
+            price: req.body.price
           }
         }).then(function(restaurant){
           console.log(restaurant[0]);
           // console.log(secondParam);
           done(null, restaurant[0]);
         }, function(err){
+          console.log(err);
           done(err);
         });
       },
