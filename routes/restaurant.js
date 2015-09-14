@@ -66,6 +66,7 @@ async.waterfall([
       term: 'food'
     }, function(err, results) {
       done(null, results);
+      // console.log(results);
     }, function(err) {
       done(err);
     });
@@ -83,9 +84,9 @@ async.waterfall([
       var url = business.url;
 
       request.get(url, function(err, res, body){
-        if (err || (res.statusCode != 200)){
-          return console.log('An error occurred while retrieving restaurant information.');
-        }
+        // if (err || (res.statusCode != 200)){
+        //   return console.log('An error occurred while retrieving restaurant information.');
+        // }
 
         var parser = new Parser(config);
         var result = parser.parse(body);
@@ -94,21 +95,24 @@ async.waterfall([
       });
 
     }, function(err, results){
-      // console.log(results);
+      console.log(results);
       done(null, results);
     }, done);
 
 
   },
   function(results, done){
-    var filteredRestaurants = [];
+    var filteredResults = [];
 
     var filteredResults = results.filter(function(business){
       // return business.price === '$$';
       console.log(res.locals.query);
       return business.price <= res.locals.query.price;
     });
+    console.log(res.locals.query.price);
     done(null, filteredResults);
+    console.log("filteredResults: ")
+    console.log(filteredResults);
   }
 
   ], function(err, results){

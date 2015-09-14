@@ -16,6 +16,11 @@ module.exports = function(sequelize, Datatypes){
       allowNull: false
     },
 
+    name: {
+      type: Datatypes.STRING,
+      allowNull: false
+    },
+
     rating: {
       type: Datatypes.FLOAT,
       allowNull: false
@@ -47,7 +52,12 @@ module.exports = function(sequelize, Datatypes){
     longitude: {
       type: Datatypes.STRING,
       allowNull: true
-    }
+    },
+
+    price: {
+      type: Datatypes.STRING,
+      allowNull: true
+    },
 
   }, {
     timestamps: true
