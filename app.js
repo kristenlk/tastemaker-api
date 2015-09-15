@@ -58,8 +58,8 @@ app.use(session({
   resave : false,
   saveUninitialized : false,
   store : new MongoStore({
-    url : "mongodb://localhost/tastemaker/sessions"
-    // url : process.env.MONGOLAB_URI + "/sessions"
+    // url : "mongodb://localhost/tastemaker/sessions"
+    url : "mongodb://heroku_kptgj5fp:kgk4cp9gfrpc2d9ui3riak69ph@ds041571.mongolab.com:41571/heroku_kptgj5fp"
   }),
   cookie : {
     httpOnly : false,
