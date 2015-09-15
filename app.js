@@ -29,7 +29,7 @@ var app = express();
 // CORS policy
 app.use(cors({
  credentials: true,
- origin: 'http://localhost:5001',
+ origin: 'http://kristenlk.github.io/tastemaker-app',
  allowedHeaders: ['Cookie', 'Content-Type']
 }));
 

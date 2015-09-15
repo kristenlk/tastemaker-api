@@ -74,7 +74,6 @@ async.waterfall([
   },
   function(results, done) {
     // parse through each restaurant, grab url, go to url and parse html, grab $$$, append it as a new key to each restaurant
-    console.log('')
     async.map(results.businesses, function(business, callback){
 
       var config = {
