@@ -89,6 +89,7 @@ async.waterfall([
         // }
 
         var parser = new Parser(config);
+        console.log(parser);
         var result = parser.parse(body);
         business.price = result.price;
         callback(null, business)
@@ -106,7 +107,7 @@ async.waterfall([
 
     var filteredResults = results.filter(function(business){
       // return business.price === '$$';
-      console.log(res.locals.query);
+      // console.log(res.locals.query);
       return business.price <= res.locals.query.price;
     });
     console.log(res.locals.query.price);

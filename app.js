@@ -29,7 +29,7 @@ app.set('view engine', 'hbs');
 // CORS policy
 app.use(cors({
  credentials: true,
- origin: 'http://localhost:5000',
+ origin: 'http://localhost:5001',
  allowedHeaders: ['Cookie', 'Content-Type']
 }));
 
@@ -58,8 +58,8 @@ app.use(session({
   resave : false,
   saveUninitialized : false,
   store : new MongoStore({
-    // url : "mongodb://localhost/tastemaker/sessions"
-    url : process.env.MONGOLAB_URI + "/sessions"
+    url : "mongodb://localhost/tastemaker/sessions"
+    // url : process.env.MONGOLAB_URI + "/sessions"
   }),
   cookie : {
     httpOnly : false,

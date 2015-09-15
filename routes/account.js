@@ -10,9 +10,11 @@ router.route('/')
   .all(function(req, res, next) {
     if (!req.user) {
       var err = new Error("Please log in to continue.");
-      return next(err);
+      // return next(err);
+      console.log(err);
+    } else {
+      next();
     }
-    next();
   })
   .get(function(req, res) {
     res.send({user: req.user});
@@ -39,9 +41,11 @@ router.route('/favorites')
   .all(function(req, res, next) {
     if (!req.user) {
       var err = new Error("Please log in to continue.");
-      return next(err);
+      // return next(err);
+      console.log(err);
+    } else {
+      next();
     }
-    next();
   })
 
 // DISPLAY FAVORITES
