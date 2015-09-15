@@ -10,14 +10,13 @@ router.route('/')
   .all(function(req, res, next) {
     if (!req.user) {
       var err = new Error("Please log in to continue.");
-      // return next(err);
-      console.log(err);
-    } else {
-      next();
+      return next(err);
     }
+      next();
+    // }
   })
   .get(function(req, res) {
-    res.send({user: req.user});
+    res.json({user: req.user});
   });
 
 

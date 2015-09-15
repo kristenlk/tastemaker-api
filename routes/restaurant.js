@@ -66,13 +66,15 @@ async.waterfall([
       term: 'food'
     }, function(err, results) {
       done(null, results);
-      // console.log(results);
+      console.log('All Yelp results, prior to parsing:');
+      console.log(results);
     }, function(err) {
       done(err);
     });
   },
   function(results, done) {
     // parse through each restaurant, grab url, go to url and parse html, grab $$$, append it as a new key to each restaurant
+    console.log('')
     async.map(results.businesses, function(business, callback){
 
       var config = {
@@ -89,13 +91,17 @@ async.waterfall([
         // }
 
         var parser = new Parser(config);
+        console.log('parser:');
         console.log(parser);
         var result = parser.parse(body);
+        console.log('result:');
+        console.log(result.price);
         business.price = result.price;
         callback(null, business)
       });
 
     }, function(err, results){
+      console.log('After parsing:');
       console.log(results);
       done(null, results);
     }, done);
@@ -104,12 +110,12 @@ async.waterfall([
   },
   function(results, done){
     var filteredResults = [];
-
     var filteredResults = results.filter(function(business){
       // return business.price === '$$';
       // console.log(res.locals.query);
       return business.price <= res.locals.query.price;
     });
+    console.log('res.locals.query.price:');
     console.log(res.locals.query.price);
     done(null, filteredResults);
     console.log("filteredResults: ")
@@ -120,7 +126,8 @@ async.waterfall([
     if (err) {
       return next(err);
     }
-    // console.log('hello');
+    console.log('results');
+    console.log(results);
     res.json(results);
 
     // go through all restaurants, new array contains only the restaurants that meet the user's price range
