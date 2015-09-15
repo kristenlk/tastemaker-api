@@ -59,7 +59,7 @@ app.use(session({
   saveUninitialized : false,
   store : new MongoStore({
     // url : "mongodb://localhost/tastemaker/sessions"
-    url : (process.env.MONGOLAB_URI + "/sessions")
+    url : process.env.MONGOLAB_URI + "/sessions"
   }),
   cookie : {
     httpOnly : false,
