@@ -29,7 +29,7 @@ var app = express();
 // CORS policy
 app.use(cors({
  credentials: true,
- origin: 'https://kristenlk.github.io',
+ origin: 'http://kristenlk.github.io',
  allowedHeaders: ['Cookie', 'Content-Type']
 }));
 
