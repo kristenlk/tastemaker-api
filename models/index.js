@@ -36,9 +36,6 @@ if (process.env.DATABASE_URL) {
   );
 };
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/tastemaker');
-
 var models = {};
 
 models.sequelize = sequelize;
