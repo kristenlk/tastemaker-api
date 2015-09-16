@@ -67,7 +67,8 @@ router.route('/favorites')
           favorite.getRestaurant().then(function(restaurant){
             // Add conditional query of Yelp API within display favorite / restaurant here. Will do later.
             // if (restaurant.createdAt)
-            callback(null, restaurant);
+            var result = {favorite: favorite, restaurant: restaurant};
+            callback(null, result);
           }, callback);
         }, function(err, result){
           if (err) {
@@ -83,8 +84,6 @@ router.route('/favorites')
       res.json(result);
     });
   })
-
-
 
 // ADD A FAVORITE
   .post(function(req, res, next) {
@@ -139,14 +138,25 @@ router.route('/favorites')
 
 // DELETE A FAVORITE
 router.route('/favorites/:id')
-  .delete(function(req, res) {
-    models.Favorite.findById(req.params.id).then(function(favorite) {
-      favorite.destroy().then(function() {
-        res.json('Your favorite has been deleted.');
-      });
-    }, function(err) {
-      res.sendStatus(500);
-    })
-  })
+  .delete(function(req, res, next) {
+    models.Favorite.destroy({
+      where: {
+        id: req.params.id
+      }
+    }).then(function(favorite){
+      res.json('Your favorite has been deleted.');
+    }, next);
+  });
+
+
+  //   models.Favorite.findById(req.params.id).then(function(favorite) {
+  //     favorite.destroy().then(function() {
+  //       res.json('Your favorite has been deleted.');
+  //     });
+  //   }, function(err) {
+  //     console.log(err);
+  //     res.sendStatus(500);
+  //   })
+  // })
 
 module.exports = router;
