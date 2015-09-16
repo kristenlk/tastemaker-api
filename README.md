@@ -20,9 +20,9 @@ Users can also favorite a restaurant, which saves the restaurant name, location 
 * Geolocation
 * HTML / CSS
 
-Link to front end: github.com/kristenlk/tastemaker-app
+Link to front end: http://github.com/kristenlk/tastemaker-app
 
-Link to back end: github.com/kristenlk/tastemaker-api
+Link to back end: http://github.com/kristenlk/tastemaker-api
 
 Links to wireframes: https://moqups.com/kristenlk/M5tlBX50/
 
