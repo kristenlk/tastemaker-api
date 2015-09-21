@@ -30,6 +30,7 @@ var app = express();
 app.use(cors({
  credentials: true,
  origin: 'http://kristenlk.github.io',
+ // origin: 'http://localhost:5000',
  allowedHeaders: ['Cookie', 'Content-Type']
 }));
 
@@ -63,7 +64,7 @@ app.use(session({
   }),
   cookie : {
     httpOnly : false,
-    maxAge : 300000 // 5 minutes
+    maxAge : 72000000 // 20 hours
   },
   genid : function(req) {
     return uuid.v4({
