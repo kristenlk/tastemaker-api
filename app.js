@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -36,8 +35,6 @@ app.use(cors({
 
 // app.use(cors());
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,7 +56,8 @@ app.use(session({
   resave : false,
   saveUninitialized : false,
   store : new MongoStore({
-    // url : "mongodb://localhost/tastemaker/sessions"
+    // url: "mongodb://localhost/tastemaker",
+    // collection: "sessions"
     url : "mongodb://heroku_kptgj5fp:kgk4cp9gfrpc2d9ui3riak69ph@ds041571.mongolab.com:41571/heroku_kptgj5fp"
   }),
   cookie : {
