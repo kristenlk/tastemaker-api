@@ -10,7 +10,7 @@ var MongoStore = require('connect-mongo')(session);
 process.env.SESSION_SECRET || require('dotenv').load();
 var passport = require('./lib/passport');
 var url = require('url');
-// var flash = require('connect-flash');
+var env = env = process.env.NODE_ENV || 'development';
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -20,6 +20,13 @@ var restaurant = require('./routes/restaurant');
 
 
 var app = express();
+
+var forceSsl = function (req, res, next) {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(['https://', req.get('Host'), req.url].join(''));
+  }
+  return next();
+};
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -34,6 +41,10 @@ app.use(cors({
 }));
 
 // app.use(cors());
+
+if (env === 'production') {
+  app.use(forceSsl);
+}
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
