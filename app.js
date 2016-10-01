@@ -20,13 +20,6 @@ var restaurant = require('./routes/restaurant');
 
 var app = express();
 
-var forceSsl = function (req, res, next) {
-  if (env === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect(['https://', req.get('Host'), req.url].join(''));
-  }
-  return next();
-};
-
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'hbs');
@@ -40,10 +33,6 @@ app.use(cors({
 }));
 
 // app.use(cors());
-
-if (env === 'production') {
-  app.use(forceSsl);
-}
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
