@@ -12,13 +12,11 @@ router.route('/')
       var err = new Error("Please log in to continue.");
       return next(err);
     }
-      next();
-    // }
+    next();
   })
   .get(function(req, res) {
     res.json({user: req.user});
   });
-
 
 // UPDATE USER INFO
 router.route('/edit')
@@ -27,13 +25,11 @@ router.route('/edit')
     req.user.update({
       email: req.body.email
     }).then(function(user) {
-      // console.log(user);
       res.json({user: req.user});
     }, function(err) {
       res.sendStatus(500);
     });
   });
-
 
 router.route('/favorites')
   //  Make sure user is logged in first
@@ -90,7 +86,6 @@ router.route('/favorites')
     async.waterfall([
       function(done){
         // A restaurant should only be created here if it doesn't already exist in the table
-        console.log(req.body);
         models.Restaurant.findOrCreate({ // Create db row for restaurant that's being favorited
           where: {
             yelp_id: req.body.yelp_id,
@@ -104,11 +99,8 @@ router.route('/favorites')
             price: req.body.price
           }
         }).then(function(restaurant){
-          console.log(restaurant[0]);
-          // console.log(secondParam);
           done(null, restaurant[0]);
         }, function(err){
-          console.log(err);
           done(err);
         });
       },
@@ -147,16 +139,5 @@ router.route('/favorites/:id')
       res.json('Your favorite has been deleted.');
     }, next);
   });
-
-
-  //   models.Favorite.findById(req.params.id).then(function(favorite) {
-  //     favorite.destroy().then(function() {
-  //       res.json('Your favorite has been deleted.');
-  //     });
-  //   }, function(err) {
-  //     console.log(err);
-  //     res.sendStatus(500);
-  //   })
-  // })
 
 module.exports = router;

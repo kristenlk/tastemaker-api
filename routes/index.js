@@ -19,9 +19,6 @@ router.get('/', function(req, res, next) {
 
 // LOG IN
 router.route('/login').
-  // get(function(req, res, next) {
-  //   res.sendStatus(405);
-  // })
   post(passport.authenticate('local'), function(req, res){
     res.sendStatus(201);
   });
@@ -72,12 +69,6 @@ router.route('/signup').
     res.sendStatus(201);
   });
 
-
-
-// CHANGE PASSWORD
-
-
-
 // LOG OUT
 router.route('/logout').
   all(function(req, res, next) {
@@ -89,6 +80,5 @@ router.route('/logout').
       res.sendStatus(200);
     });
   });
-
 
 module.exports = router;
