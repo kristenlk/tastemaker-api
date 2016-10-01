@@ -37,15 +37,16 @@ router.route('/edit')
 
 router.route('/favorites')
   //  Make sure user is logged in first
-  .all(function(req, res, next) {
-    if (!req.user) {
-      var err = new Error("Please log in to continue.");
-      // return next(err);
-      console.log(err);
-    } else {
-      next();
-    }
-  })
+  // .all(function(req, res, next) {
+  //   console.log(req);
+  //   if (!req.user) {
+  //     var err = new Error("Please log in to continue.");
+  //     // return next(err);
+  //     console.log(err);
+  //   } else {
+  //     next();
+  //   }
+  // })
 
 // DISPLAY FAVORITES
   .get(function(req, res){
