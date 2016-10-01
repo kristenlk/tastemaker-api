@@ -10,7 +10,6 @@ var MongoStore = require('connect-mongo')(session);
 process.env.SESSION_SECRET || require('dotenv').load();
 var passport = require('./lib/passport');
 var url = require('url');
-var env = env = process.env.NODE_ENV || 'development';
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
