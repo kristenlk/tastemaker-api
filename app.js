@@ -18,11 +18,10 @@ var account = require('./routes/account');
 var restaurant = require('./routes/restaurant');
 // var favorites = require('./routes/favorites');
 
-
 var app = express();
 
 var forceSsl = function (req, res, next) {
-  if (req.headers['x-forwarded-proto'] !== 'https') {
+  if (env === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
     return res.redirect(['https://', req.get('Host'), req.url].join(''));
   }
   return next();
@@ -35,7 +34,7 @@ var forceSsl = function (req, res, next) {
 // CORS policy
 app.use(cors({
  credentials: true,
- origin: 'https://kristenlk.github.io',
+ origin: ['https://kristenlk.github.io', 'http://localhost:5000', 'https://mighty-ridge-7861.herokuapp.com'],
  // origin: 'http://localhost:5000',
  allowedHeaders: ['Cookie', 'Content-Type']
 }));
