@@ -34,7 +34,7 @@ var forceSsl = function (req, res, next) {
 // CORS policy
 app.use(cors({
  credentials: true,
- origin: ['https://kristenlk.github.io', 'http://localhost:5000', 'https://mighty-ridge-7861.herokuapp.com'],
+ origin: 'https://kristenlk.github.io',
  // origin: 'http://localhost:5000',
  allowedHeaders: ['Cookie', 'Content-Type']
 }));
