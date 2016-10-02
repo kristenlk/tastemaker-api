@@ -35,7 +35,7 @@
     "sequelize-cli": "~2.4.0",
     "simple-oauth2": "^1.0.0",
     "uuid": "~2.0.3",
-    "yelp-api-v3": "^1.1.0"
+    "yelp-api-v3": "^1.2.0"
   },
   "engines": {
     "node": "4.6.0",
