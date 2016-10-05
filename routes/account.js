@@ -27,7 +27,6 @@ router.route('/edit')
     req.user.update({
       email: req.body.email
     }).then(function(user) {
-      // console.log(user);
       res.json({user: req.user});
     }, function(err) {
       res.sendStatus(500);
@@ -37,22 +36,22 @@ router.route('/edit')
 
 router.route('/favorites')
   //  Make sure user is logged in first
-  // .all(function(req, res, next) {
-  //   console.log(req);
-  //   if (!req.user) {
-  //     var err = new Error("Please log in to continue.");
-  //     // return next(err);
-  //     console.log(err);
-  //   } else {
-  //     next();
-  //   }
-  // })
+  .all(function(req, res, next) {
+    console.log(req);
+    if (!req.user) {
+      var err = new Error("Please log in to continue.");
+      // return next(err);
+      console.log(err);
+    } else {
+      next();
+    }
+  })
 
 // DISPLAY FAVORITES
   .get(function(req, res){
     async.waterfall([
       function(done){
-        models.Favorite.findAll({ // Find all user's favorites
+        models.Favorite.findAll({
           where : {
             UserId : req.user.id
           }
@@ -91,8 +90,7 @@ router.route('/favorites')
     async.waterfall([
       function(done){
         // A restaurant should only be created here if it doesn't already exist in the table
-        console.log(req.body);
-        models.Restaurant.findOrCreate({ // Create db row for restaurant that's being favorited
+        models.Restaurant.findOrCreate({
           where: {
             yelp_id: req.body.yelp_id,
             name: req.body.name,
@@ -105,18 +103,14 @@ router.route('/favorites')
             price: req.body.price
           }
         }).then(function(restaurant){
-          console.log(restaurant[0]);
-          // console.log(secondParam);
           done(null, restaurant[0]);
         }, function(err){
-          console.log(err);
           done(err);
         });
       },
 
       function(restaurant, done){
-        console.log(restaurant.id);
-        models.Favorite.findOrCreate({ // Add the restaurant to the user's favorites
+        models.Favorite.findOrCreate({
           where: {
             UserId: req.user.id,
             RestaurantId: restaurant.id
@@ -148,16 +142,5 @@ router.route('/favorites/:id')
       res.json('Your favorite has been deleted.');
     }, next);
   });
-
-
-  //   models.Favorite.findById(req.params.id).then(function(favorite) {
-  //     favorite.destroy().then(function() {
-  //       res.json('Your favorite has been deleted.');
-  //     });
-  //   }, function(err) {
-  //     console.log(err);
-  //     res.sendStatus(500);
-  //   })
-  // })
 
 module.exports = router;

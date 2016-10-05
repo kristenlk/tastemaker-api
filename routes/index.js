@@ -19,9 +19,6 @@ router.get('/', function(req, res, next) {
 
 // LOG IN
 router.route('/login').
-  // get(function(req, res, next) {
-  //   res.sendStatus(405);
-  // })
   post(passport.authenticate('local'), function(req, res){
     res.sendStatus(201);
   });

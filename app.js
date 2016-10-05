@@ -15,19 +15,14 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var account = require('./routes/account');
 var restaurant = require('./routes/restaurant');
-// var favorites = require('./routes/favorites');
 
 var app = express();
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'hbs');
 
 // CORS policy
 app.use(cors({
  credentials: true,
  origin: true,
- // origin: 'http://localhost:5000',
+ // origin: 'http://localhost:8000',
  allowedHeaders: ['Cookie', 'Content-Type']
 }));
 
@@ -43,10 +38,6 @@ app.use(function(req,res,next){
   next();
 });
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// flash
-// app.use(flash());
 
 // sessions
 app.use(session({
@@ -80,8 +71,6 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/account', account);
 app.use('/restaurant', restaurant);
-// app.use('/favorites', favorites);
-
 
 // error handlers
 
