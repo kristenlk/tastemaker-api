@@ -59,8 +59,8 @@ router.route('/signup').
         });
       }
     ], function(err, result) {
-      if(err) {
-        return next(err);
+      if (err) {
+        res.status(400).send(err);
       }
 
       next();
