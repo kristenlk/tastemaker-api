@@ -4,11 +4,6 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models/index');
 var async = require('async');
-
-// html parsing
-var Parser = require('jq-html-parser');
-var request = require('request');
-
 var Yelp = require('yelp-api-v3');
 
 var yelp = new Yelp({
@@ -23,7 +18,7 @@ router.route('/')
       function(done) {
         var priceArray = [];
 
-        for (var i = 1; i <= 4; i++) {
+        for (var i = 1; i <= res.locals.query.price; i++) {
            priceArray.push(i);
         }
 
